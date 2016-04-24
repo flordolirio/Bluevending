@@ -57,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
             statusMessage.setText("Solicitando ativação do Bluetooth...");
         }
         else{
-            statusMessage.setText("Bluetooth já ativado :)");
+            statusMessage.setText("Bluetooth já ativado!");
             //Toast.makeText(getApplicationContext(),"Already on", Toast.LENGTH_LONG).show();
         }
     }
@@ -68,10 +68,10 @@ public class MainActivity extends AppCompatActivity {
 
         if(requestCode == ENABLE_BLUETOOTH) {//identificador sobre qual Activity está retornando um resultado, é definido na chamada do método startActivityForResult().
             if(resultCode == RESULT_OK) {//traz a informação sobre a decisão do usuário RESULT_OK : adaptador Bluetooth foi ativado.
-                statusMessage.setText("Bluetooth ativado :D");
+                statusMessage.setText("Bluetooth ativado!");
             }
             else {
-                statusMessage.setText("Bluetooth não ativado :(");
+                statusMessage.setText("Bluetooth não ativado!");
             }
         }
         else if(requestCode == SELECT_PAIRED_DEVICE || requestCode == SELECT_DISCOVERED_DEVICE  ) {
