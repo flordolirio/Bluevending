@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="#ebebeb"
+        android:translationZ="5dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="68dp"
+            android:layout_height="51dp"
+            android:layout_gravity="left|top">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal|top">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonProcess"
+                android:layout_gravity="center_horizontal"
+                android:checked="true"
+                android:layout_alignTop="@+id/radioButtonProcess2"
+                android:layout_toStartOf="@+id/radioButtonProcess2"
+                android:layout_alignBottom="@+id/radioButtonProcess2"
+                android:layout_toLeftOf="@+id/radioButtonProcess2"
+                android:clickable="false" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonProcess2"
+                android:layout_gravity="right|center_vertical"
+                android:checked="true"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:clickable="false" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonProcess3"
+                android:checked="true"
+                android:layout_alignTop="@+id/radioButtonProcess2"
+                android:layout_toRightOf="@+id/radioButtonProcess2"
+                android:layout_toEndOf="@+id/radioButtonProcess2"
+                android:clickable="false" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="143dp"
+            android:layout_height="143dp"
+            android:id="@+id/imageViewSuccessfulOrder"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_success"
+            android:paddingLeft="0dp"
+            android:paddingTop="0dp"
+            android:layout_marginTop="-70dp"
+            android:translationZ="0dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Produto liberado!"
+            android:id="@+id/textViewSuccessfulOrder"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:textColor="#050d3d"
+            android:textSize="25dp" />
+
+        <Button
+            android:layout_width="299dp"
+            android:layout_height="99dp"
+            android:text="Reportar"
+            android:id="@+id/buttonSuccessfulOrder"
+            android:layout_gravity="center_horizontal|bottom"
+            android:layout_weight="0.24"
+            android:layout_marginTop="35dp"
+            android:background="#e01a15"
+            android:textColor="#ffffff"
+            android:paddingBottom="0dp"
+            android:layout_marginBottom="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginLeft="10dp" />
+
+    </FrameLayout>
+
+</LinearLayout>

@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/editTextNotifications"
+        android:layout_gravity="center_horizontal"
+        android:text="Notificações"
+        android:background="#000000"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_weight="0.51" />
+
+    <TextView
+        android:layout_width="272dp"
+        android:layout_height="56dp"
+        android:text="Produto Escolhido"
+        android:id="@+id/labelSelectedProduct"
+        android:clickable="false"
+        android:background="#4eaaf0"
+        android:textColor="#ffffff"
+        android:textStyle="bold"
+        android:textAlignment="center"
+        android:layout_marginTop="20dp"
+        android:layout_gravity="center_horizontal"
+        android:textSize="20dp"
+        android:gravity="center_vertical|center_horizontal"
+        android:alpha="5"
+        android:translationZ="6dp" />
+
+    <ScrollView
+        android:layout_width="354dp"
+        android:layout_height="225dp"
+        android:id="@+id/scrollViewSelectedProduct"
+        android:layout_gravity="center_horizontal"
+        android:fillViewport="false"
+        android:layout_marginTop="-25dp"
+        android:background="#ebebeb"
+        android:alpha="1"
+        android:translationZ="5dp">
+
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/listViewSelectedProduct"
+            android:choiceMode="none"
+            android:paddingTop="40dp"
+            android:alpha="4"
+            android:textAlignment="center"
+            android:textFilterEnabled="false" />
+    </ScrollView>
+
+    <Button
+        android:layout_width="312dp"
+        android:layout_height="wrap_content"
+        android:text="Confirmar Pagamento"
+        android:id="@+id/buttonConfirmPayment"
+        android:layout_gravity="center_horizontal"
+        android:layout_weight="0.24"
+        android:layout_marginTop="35dp"
+        android:background="#1f8e15"
+        android:textColor="#ffffff" />
+
+</LinearLayout>

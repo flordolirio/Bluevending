@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:weightSum="1">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginLeft="20dp"
+        android:background="#ebebeb"
+        android:translationZ="5dp">
+
+        <LinearLayout
+            android:orientation="vertical"
+            android:layout_width="68dp"
+            android:layout_height="51dp"
+            android:layout_gravity="left|top">
+
+        </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:layout_gravity="center_horizontal|top">
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonProcess"
+                android:layout_gravity="center_horizontal"
+                android:checked="false"
+                android:layout_alignTop="@+id/radioButtonProcess2"
+                android:layout_toStartOf="@+id/radioButtonProcess2"
+                android:layout_alignBottom="@+id/radioButtonProcess2"
+                android:layout_toLeftOf="@+id/radioButtonProcess2"
+                android:clickable="false" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonProcess2"
+                android:layout_gravity="right|center_vertical"
+                android:checked="false"
+                android:layout_centerVertical="true"
+                android:layout_centerHorizontal="true"
+                android:clickable="false" />
+
+            <RadioButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/radioButtonProcess3"
+                android:checked="false"
+                android:layout_alignTop="@+id/radioButtonProcess2"
+                android:layout_toRightOf="@+id/radioButtonProcess2"
+                android:layout_toEndOf="@+id/radioButtonProcess2"
+                android:clickable="false" />
+        </RelativeLayout>
+
+        <ImageView
+            android:layout_width="189dp"
+            android:layout_height="189dp"
+            android:layout_gravity="center"
+            android:src="@mipmap/ic_loading_2"
+            android:paddingLeft="-15dp"
+            android:paddingTop="0dp"
+            android:layout_marginTop="-70dp"
+            android:id="@+id/ImageViewRequestRefund" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Registrando estorno"
+            android:id="@+id/textViewRequestRefund"
+            android:layout_gravity="center"
+            android:layout_marginTop="40dp"
+            android:textColor="#050d3d"
+            android:textSize="25dp" />
+
+    </FrameLayout>
+
+</LinearLayout>
