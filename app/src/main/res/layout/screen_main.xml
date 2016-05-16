@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
@@ -12,9 +13,9 @@
         android:text="Notificações"
         android:background="#000000"
         android:textColor="#ffffff"
-        android:textStyle="bold"
         android:textAlignment="center"
-        android:layout_weight="0.77" />
+        android:layout_weight="0.19"
+        android:editable="false" />
 
     <TextView
         android:layout_width="272dp"
@@ -33,26 +34,29 @@
         android:alpha="5"
         android:translationZ="6dp" />
 
-    <ScrollView
-        android:layout_width="354dp"
-        android:layout_height="332dp"
-        android:id="@+id/scrollViewTopList"
-        android:layout_gravity="center_horizontal"
-        android:fillViewport="false"
-        android:layout_marginTop="-25dp"
-        android:background="#ebebeb"
-        android:alpha="1"
-        android:translationZ="5dp">
-
         <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="354dp"
+            android:layout_height="332dp"
             android:id="@+id/listViewTopList"
             android:choiceMode="none"
             android:paddingTop="40dp"
-            android:alpha="4"
             android:textAlignment="center"
-            android:textFilterEnabled="false" />
-    </ScrollView>
+            android:textFilterEnabled="false"
+            android:clickable="false"
+            android:layout_gravity="center_horizontal"
+            android:fillViewport="false"
+            android:layout_marginTop="-25dp"
+            android:background="#ebebeb"
+            android:alpha="1"
+            android:translationZ="5dp"
+            tools:listitem="@android:layout/simple_list_item_1"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp" />
+
+
+    <!--<ScrollView
+        android:layout_height="332dp"
+        android:id="@+id/scrollViewTopList"
+    </ScrollView>-->
 
 </LinearLayout>

@@ -45,6 +45,12 @@
             android:label="Inserir Dados de Pagamento"
             android:screenOrientation="portrait" >
         </activity>
+
+        <activity
+            android:name=".MainScreen"
+            android:label="Tela Principal"
+            android:screenOrientation="portrait" >
+        </activity>
     </application>
 
 </manifest>
