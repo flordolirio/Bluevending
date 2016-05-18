@@ -12,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.AdapterView;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.TextView;
@@ -23,15 +24,12 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     Button button_on, button_off, button_visible, button_devices;
-    ListView lv;
     //variables to control bluetooth:
     private BluetoothAdapter BA;
-    private Set<BluetoothDevice> pairedDevices;
-    private OutputStream outStream = null;
-    public static String EXTRA_ADDRESS = "device_address";
     public static int ENABLE_BLUETOOTH = 1;
     public static int SELECT_PAIRED_DEVICE = 2;
     public static int SELECT_DISCOVERED_DEVICE = 3;
+    ConnectionThread connect;
 
     static TextView statusMessage;
 
@@ -78,6 +76,8 @@ public class MainActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 statusMessage.setText("Você selecionou " + data.getStringExtra("btDevName") + "\n"
                         + data.getStringExtra("btDevAddress"));
+                connect = new ConnectionThread(data.getStringExtra("btDevAddress"));
+                connect.start();
 
             }
             else {
@@ -87,11 +87,16 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void off(View v){
-        BA.disable();
-        statusMessage.setText("Desativando Bluetooth");
+        if(BA.isEnabled()){
+            BA.disable();
+            statusMessage.setText("Desativando Bluetooth...");
+        }
+        else {
+            statusMessage.setText("Bluetooth já desativado!");
+        }
     }
 
-    public  void visible(View v){
+    public void visible(View v){
         Intent getVisible = new Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
         startActivityForResult(getVisible, 0);
     }
@@ -107,4 +112,18 @@ public class MainActivity extends AppCompatActivity {
         Intent searchPairedDevicesIntent = new Intent(this, DiscoveredDevices.class);
         startActivityForResult(searchPairedDevicesIntent, SELECT_DISCOVERED_DEVICE);
     }
+
+    public static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            Bundle bundle = msg.getData();
+            byte[] data = bundle.getByteArray("data");
+            String dataString= new String(data);
+
+            if(dataString.equals("---N"))
+                statusMessage.setText("Ocorreu um erro durante a conexão!");
+            else if(dataString.equals("---S"))
+                statusMessage.setText("Conectado!");
+        }
+    };
 }
