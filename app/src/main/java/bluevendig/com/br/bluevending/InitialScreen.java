@@ -230,9 +230,6 @@ public class InitialScreen extends AppCompatActivity {
                 bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(auxPaymentMethod));
                 mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
 
-                // Create payment
-                /*createPayment(this, auxToken, 1, null,
-                        JsonUtil.getInstance().fromJson(auxPaymentMethod, PaymentMethod.class), null);*/
             } else {
                 textView2.setText("Inserção de cartão foi abortada/informações inválidas de cartão recebidas!");
 

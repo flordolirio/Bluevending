@@ -1,9 +1,12 @@
 package bluevendig.com.br.bluevending;
 
+import android.app.Activity;
+import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -16,13 +19,18 @@ import java.util.List;
 
 public class MainScreen extends AppCompatActivity {
 
+    // Constraints
+    public static final int CARD_REQUEST_CODE = 13;
+
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
 
     // Activity parameters
+    protected Activity mActivity;
     private ArrayList<String> productTopList;
     ArrayAdapter<String> adapterTopList;
+    CountDownTimer counter;
 
     // Layout Controls
     private TextView notifications;
@@ -57,7 +65,7 @@ public class MainScreen extends AppCompatActivity {
 
 
         // Timer
-        new CountDownTimer(30000, 1000) {
+        counter = new CountDownTimer(30000, 1000) {
 
             public void onTick(long millisUntilFinished) {
                 notifications.setText("Por favor, selecione um produto na máquina de vendas dentro dos próximos " + millisUntilFinished / 1000 + " segundos.");
@@ -76,6 +84,20 @@ public class MainScreen extends AppCompatActivity {
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+
+    }
+
+    public void onButtonSubmit(View view) {
+        mActivity = MainScreen.this;
+
+        Intent selectedProductIntent = new Intent(MainScreen.this, ProductSelected.class);
+        selectedProductIntent.putExtra("token", cardToken);
+        selectedProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        mActivity.startActivityForResult(selectedProductIntent, CARD_REQUEST_CODE);
     }
 
 }

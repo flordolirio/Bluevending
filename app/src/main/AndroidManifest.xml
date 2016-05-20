@@ -47,10 +47,47 @@
         </activity>
 
         <activity
+            android:name=".ProductSelected"
+            android:label="Confirmar Produto"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".TransactionWait"
+            android:label="Transação de Pagamento"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".TransactionFailed"
+            android:label="Transação Falhou"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".ProductReleasing"
+            android:label="Pagamento Finalizado"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".OrderSuccessfully"
+            android:label="Pedido Finalizado"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
+            android:name=".RefundRequest"
+            android:label="Reembolso"
+            android:screenOrientation="portrait" >
+        </activity>
+
+        <activity
             android:name=".MainScreen"
             android:label="Tela Principal"
             android:screenOrientation="portrait" >
         </activity>
+
     </application>
 
 </manifest>

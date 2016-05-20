@@ -86,7 +86,7 @@
             android:layout_width="299dp"
             android:layout_height="99dp"
             android:text="Reportar"
-            android:id="@+id/buttonSuccessfulOrder"
+            android:id="@+id/buttonReportOrder"
             android:layout_gravity="center_horizontal|bottom"
             android:layout_weight="0.24"
             android:layout_marginTop="35dp"
@@ -95,7 +95,8 @@
             android:paddingBottom="0dp"
             android:layout_marginBottom="20dp"
             android:layout_marginRight="10dp"
-            android:layout_marginLeft="10dp" />
+            android:layout_marginLeft="10dp"
+            android:onClick="onReportSubmit" />
 
     </FrameLayout>
 

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:weightSum="1">
@@ -12,9 +13,11 @@
         android:text="Notificações"
         android:background="#000000"
         android:textColor="#ffffff"
-        android:textStyle="bold"
         android:textAlignment="center"
-        android:layout_weight="0.51" />
+        android:layout_weight="0.51"
+        android:onClick="onDebugSubmit"
+        android:clickable="true"
+        android:editable="false" />
 
     <TextView
         android:layout_width="272dp"
@@ -33,27 +36,24 @@
         android:alpha="5"
         android:translationZ="6dp" />
 
-    <ScrollView
+    <ListView
         android:layout_width="354dp"
         android:layout_height="225dp"
-        android:id="@+id/scrollViewSelectedProduct"
         android:layout_gravity="center_horizontal"
+        android:id="@+id/listViewSelectedProduct"
+        android:choiceMode="none"
+        android:paddingTop="40dp"
         android:fillViewport="false"
         android:layout_marginTop="-25dp"
         android:background="#ebebeb"
         android:alpha="1"
-        android:translationZ="5dp">
+        android:textAlignment="center"
+        android:textFilterEnabled="false"
+        android:translationZ="5dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginLeft="10dp"
+        tools:listitem="@android:layout/simple_list_item_1" />
 
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/listViewSelectedProduct"
-            android:choiceMode="none"
-            android:paddingTop="40dp"
-            android:alpha="4"
-            android:textAlignment="center"
-            android:textFilterEnabled="false" />
-    </ScrollView>
 
     <Button
         android:layout_width="312dp"
@@ -64,6 +64,7 @@
         android:layout_weight="0.24"
         android:layout_marginTop="35dp"
         android:background="#1f8e15"
-        android:textColor="#ffffff" />
+        android:textColor="#ffffff"
+        android:onClick="onButtonSubmit" />
 
 </LinearLayout>
