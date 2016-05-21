@@ -219,7 +219,7 @@ public class InitialScreen extends AppCompatActivity {
                 String auxToken = data.getStringExtra("token");
                 PaymentMethod auxPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
-                mActivity = InitialScreen.this;
+                /*mActivity = InitialScreen.this;
 
                 // Bluetooth: lista de máquinas de vendas e interface bluetooth deveria ser invocado
                 // Mas quem é invocado, por enquanto já é a classe principal com a lista dos produtos.
@@ -228,7 +228,20 @@ public class InitialScreen extends AppCompatActivity {
                 Intent bluetoothIntent = new Intent(InitialScreen.this, MainScreen.class);
                 bluetoothIntent.putExtra("token", auxToken);
                 bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(auxPaymentMethod));
+                mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);*/
+
+                mActivity = InitialScreen.this;
+
+                // Bluetooth: lista de máquinas de vendas e interface bluetooth deveria ser invocado
+                // Mas quem é invocado, por enquanto já é a classe principal com a lista dos produtos.
+                // As Informações do cartão de crédito - código token para o cartão e método de pagamento
+                // - são então passadas adiante até a atividade que permite ao usuário pagar pelo produto.
+                Intent bluetoothIntent = new Intent(InitialScreen.this, MainActivity.class);
+                bluetoothIntent.putExtra("token", auxToken);
+                bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(auxPaymentMethod));
                 mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
+
+
 
             } else {
                 textView2.setText("Inserção de cartão foi abortada/informações inválidas de cartão recebidas!");

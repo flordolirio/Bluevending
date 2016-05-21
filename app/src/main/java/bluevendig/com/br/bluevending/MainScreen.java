@@ -5,6 +5,8 @@ import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -36,10 +38,21 @@ public class MainScreen extends AppCompatActivity {
     private TextView notifications;
     private ListView productsList;
 
+    String address = null;
+    ConnectionThread connect;
+
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
+        //receive the address of the bluetooth device
+        Intent newint = getIntent();
+        address = newint.getStringExtra(MainActivity.EXTRA_ADDRESS);
+
         setContentView(R.layout.screen_main);
+
+        //faz a conexão com a máquina escolhida
+        //connect = new ConnectionThread(address);
+        //connect.start();
 
         // Get activity parameters
         // productTopList Receber via Bluetooth
@@ -99,5 +112,26 @@ public class MainScreen extends AppCompatActivity {
         selectedProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         mActivity.startActivityForResult(selectedProductIntent, CARD_REQUEST_CODE);
     }
+
+    public static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            Bundle bundle = msg.getData();
+            byte[] data = bundle.getByteArray("data");
+            String dataString= new String(data);
+
+            if(dataString.equals("---N")){
+                //statusMessage.setText("Ocorreu um erro durante a conexão!");
+            }
+            else if(dataString.equals("---S")){
+                //statusMessage.setText("Conectado!");
+            }
+            else {
+                //Aqui recebe os dados
+                //textSpace.setText(new String(data));
+            }
+        }
+    };
 
 }

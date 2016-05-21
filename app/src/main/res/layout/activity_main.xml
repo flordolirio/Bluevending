@@ -19,32 +19,6 @@
         <Button
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
-            android:text="Ligar Bluetooth"
-            android:clickable="true"
-            android:layout_marginTop="20dp"
-            android:id="@+id/button_on"
-            android:onClick="on"/>
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_off"
-            android:id="@+id/button_off"
-            android:onClick="off"
-            android:layout_marginTop="20dp" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/btn_visible"
-            android:id="@+id/button_visible"
-            android:layout_gravity="center_horizontal"
-            android:onClick="visible"
-            android:layout_marginTop="20dp" />
-
-        <Button
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
             android:text="@string/btn_devices"
             android:onClick="searchPairedDevices"
             android:layout_marginTop="20dp"

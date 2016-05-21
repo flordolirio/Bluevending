@@ -88,7 +88,7 @@ public class ConnectionThread extends Thread{
         Bundle bundle = new Bundle();
         bundle.putByteArray("data", data);
         message.setData(bundle);
-        MainActivity.handler.sendMessage(message);
+        MainScreen.handler.sendMessage(message);
     }
 
     public void write(byte[] data) {

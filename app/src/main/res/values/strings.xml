@@ -4,8 +4,8 @@
     <string name="btn_off">Desligar Bluetooth</string>
     <string name="btn_visible">Ficar visível</string>
     <string name="tv_paired">Dispositivos pareados:</string>
-    <string name="btn_devices">Dispositivos pareados</string>
-    <string name="btn_descobrir">Iniciar descoberta de dispositivos</string>
+    <string name="btn_devices">Máquinas pareadas</string>
+    <string name="btn_descobrir">Descobrir máquinas perto de você</string>
     <string name="action_settings">Settings</string>
     <string name="statusMessage">Status</string>
 </resources>
