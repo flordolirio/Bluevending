@@ -22,8 +22,13 @@ public class ConnectionThread extends Thread{
     String myUUID = "00001101-0000-1000-8000-00805F9B34FB";
     boolean running = false;
 
+
     public ConnectionThread(String btDevAddress) {
         this.btDevAddress = btDevAddress;
+    }
+
+    public ConnectionThread() {
+        super();
     }
 
     public void run() {

@@ -1,49 +1,35 @@
 package bluevendig.com.br.bluevending;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.KeyEvent;
 import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.Toast;
 import android.widget.TextView;
 
-import java.lang.reflect.Type;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-import com.mercadopago.*;
 import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
 import com.mercadopago.model.Card;
 import com.mercadopago.model.CardToken;
-import com.mercadopago.model.Customer;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.model.PaymentMethodRow;
-import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
-import com.mercadopago.util.MercadoPagoUtil;
 
 
 import retrofit2.Response;
@@ -173,8 +159,6 @@ public class InitialScreen extends AppCompatActivity {
                 textView2.setText("Um tipo de Cartão foi selecionado pelo usuário!");
 
                 // Set payment method
-                PaymentMethod paymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
-
                 mTempPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
                 mActivity = InitialScreen.this;
@@ -219,24 +203,11 @@ public class InitialScreen extends AppCompatActivity {
                 String auxToken = data.getStringExtra("token");
                 PaymentMethod auxPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
 
-                /*mActivity = InitialScreen.this;
-
-                // Bluetooth: lista de máquinas de vendas e interface bluetooth deveria ser invocado
-                // Mas quem é invocado, por enquanto já é a classe principal com a lista dos produtos.
-                // As Informações do cartão de crédito - código token para o cartão e método de pagamento
-                // - são então passadas adiante até a atividade que permite ao usuário pagar pelo produto.
-                Intent bluetoothIntent = new Intent(InitialScreen.this, MainScreen.class);
-                bluetoothIntent.putExtra("token", auxToken);
-                bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(auxPaymentMethod));
-                mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);*/
-
                 mActivity = InitialScreen.this;
 
-                // Bluetooth: lista de máquinas de vendas e interface bluetooth deveria ser invocado
-                // Mas quem é invocado, por enquanto já é a classe principal com a lista dos produtos.
                 // As Informações do cartão de crédito - código token para o cartão e método de pagamento
-                // - são então passadas adiante até a atividade que permite ao usuário pagar pelo produto.
-                Intent bluetoothIntent = new Intent(InitialScreen.this, MainActivity.class);
+                // são passadas adiante até a atividade que permite ao usuário pagar pelo produto.
+                Intent bluetoothIntent = new Intent(InitialScreen.this, BluetoothActivity.class);
                 bluetoothIntent.putExtra("token", auxToken);
                 bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(auxPaymentMethod));
                 mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);

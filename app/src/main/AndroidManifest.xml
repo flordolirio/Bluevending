@@ -20,7 +20,7 @@
         </activity>
 
         <activity
-            android:name=".MainActivity">
+            android:name=".BluetoothActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -30,13 +30,13 @@
         <activity
             android:name=".PairedDevices"
             android:label="Dispositivos pareados"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".BluetoothActivity" >
         </activity>
 
         <activity
             android:name=".DiscoveredDevices"
             android:label="Dispositivos Descobertos"
-            android:parentActivityName=".MainActivity" >
+            android:parentActivityName=".BluetoothActivity" >
         </activity>
 
         <activity

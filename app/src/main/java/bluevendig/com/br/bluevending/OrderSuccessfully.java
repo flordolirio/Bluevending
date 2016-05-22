@@ -1,5 +1,6 @@
 package bluevendig.com.br.bluevending;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -8,10 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.JsonUtil;
+
 public class OrderSuccessfully extends AppCompatActivity {
 
     // Activity parameters
     CountDownTimer counter;
+
+    //variaveis para passar o token do cartao de credito
+    public static final int CARD_REQUEST_CODE = 13;
+    protected Activity mActivity;
+
+    protected String cardToken;
+    protected PaymentMethod paymentMethod;
 
     // Layout Controls
     Button reportOrder;
@@ -22,6 +33,9 @@ public class OrderSuccessfully extends AppCompatActivity {
         setContentView(R.layout.successful_order);
 
         // Get activity parameters
+
+        cardToken = this.getIntent().getStringExtra("token");
+        paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
 
         // Set layout controls
         reportOrder = (Button) findViewById(R.id.buttonReportOrder);
@@ -41,7 +55,11 @@ public class OrderSuccessfully extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
-        finish();
+        mActivity = OrderSuccessfully.this;
+        Intent bluetoothIntent = new Intent(OrderSuccessfully.this, BluetoothActivity.class);
+        bluetoothIntent.putExtra("token", cardToken);
+        bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
     }
 
 

@@ -96,6 +96,7 @@ public class CardActivity extends AppCompatActivity {
 
         // Set payment method image
         mPaymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+
         if (mPaymentMethod.getId() != null) {
             ImageView pmImage = (ImageView) findViewById(com.mercadopago.R.id.pmImage);
             pmImage.setImageResource(MercadoPagoUtil.getPaymentMethodIcon(this, mPaymentMethod.getId()));

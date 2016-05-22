@@ -1,7 +1,6 @@
 package bluevendig.com.br.bluevending;
 
 import android.app.Activity;
-import android.app.ListActivity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -17,7 +16,6 @@ import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
 import java.util.ArrayList;
-import java.util.List;
 
 public class MainScreen extends AppCompatActivity {
 
@@ -38,21 +36,18 @@ public class MainScreen extends AppCompatActivity {
     private TextView notifications;
     private ListView productsList;
 
-    String address = null;
-    ConnectionThread connect;
+    protected String address = null;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         //receive the address of the bluetooth device
         Intent newint = getIntent();
-        address = newint.getStringExtra(MainActivity.EXTRA_ADDRESS);
+        address = newint.getStringExtra(BluetoothActivity.EXTRA_ADDRESS);
 
         setContentView(R.layout.screen_main);
 
-        //faz a conexão com a máquina escolhida
-        //connect = new ConnectionThread(address);
-        //connect.start();
+        //recebe os dados na função handle
 
         // Get activity parameters
         // productTopList Receber via Bluetooth

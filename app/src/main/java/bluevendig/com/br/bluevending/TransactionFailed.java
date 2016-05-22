@@ -1,13 +1,24 @@
 package bluevendig.com.br.bluevending;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
+
+import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.util.JsonUtil;
 
 public class TransactionFailed extends AppCompatActivity {
 
     // Activity parameters
     CountDownTimer counter;
+
+    public static final int CARD_REQUEST_CODE = 13;
+    protected Activity mActivity;
+
+    protected String cardToken;
+    protected PaymentMethod paymentMethod;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -15,6 +26,9 @@ public class TransactionFailed extends AppCompatActivity {
         setContentView(R.layout.failed_transaction);
 
         // Get activity parameters
+
+        cardToken = this.getIntent().getStringExtra("token");
+        paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
 
         // Set layout controls
 
@@ -33,6 +47,11 @@ public class TransactionFailed extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
+        mActivity = TransactionFailed.this;
+        Intent bluetoothIntent = new Intent(TransactionFailed.this, BluetoothActivity.class);
+        bluetoothIntent.putExtra("token", cardToken);
+        bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }
 
