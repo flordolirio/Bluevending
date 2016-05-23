@@ -21,6 +21,7 @@ public class OrderSuccessfully extends AppCompatActivity {
     public static final int CARD_REQUEST_CODE = 13;
     protected Activity mActivity;
 
+    // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
 
@@ -56,6 +57,7 @@ public class OrderSuccessfully extends AppCompatActivity {
     public void onBackPressed() {
         // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
         mActivity = OrderSuccessfully.this;
+
         Intent bluetoothIntent = new Intent(OrderSuccessfully.this, BluetoothActivity.class);
         bluetoothIntent.putExtra("token", cardToken);
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
@@ -64,8 +66,12 @@ public class OrderSuccessfully extends AppCompatActivity {
 
 
     public void onReportSubmit(View view) {
+        mActivity = OrderSuccessfully.this;
+
         Intent requestRefundIntent = new Intent(OrderSuccessfully.this, RefundRequest.class);
-        startActivity(requestRefundIntent);
+        requestRefundIntent.putExtra("token", cardToken);
+        requestRefundIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        mActivity.startActivityForResult(requestRefundIntent, CARD_REQUEST_CODE);
     }
 
 }

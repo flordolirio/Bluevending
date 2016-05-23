@@ -26,6 +26,9 @@ import retrofit2.Response;
 
 public class TransactionWait extends AppCompatActivity {
 
+    // Constraints
+    public static final int CARD_REQUEST_CODE = 13;
+
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
@@ -33,6 +36,7 @@ public class TransactionWait extends AppCompatActivity {
     // Activity parameters
     protected BigDecimal productPrice;
     CountDownTimer counter;
+    protected Activity mActivity;
 
     // Layout Controls
     private TextView chronometerWaiter;
@@ -118,26 +122,26 @@ public class TransactionWait extends AppCompatActivity {
 
             if (resultCode == RESULT_OK ) {
                 //notifications.setText("Um Pagamento foi efetuado com sucesso pelo cliente!");
+                mActivity = TransactionWait.this;
+
                 Intent releaseProductIntent = new Intent(TransactionWait.this, ProductReleasing.class);
-                startActivity(releaseProductIntent);
+                releaseProductIntent.putExtra("token", cardToken);
+                releaseProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                mActivity.startActivityForResult(releaseProductIntent, CARD_REQUEST_CODE);
 
             } else {
                 //notifications.setText("Um pagamento foi abortado/falhou em ser executado pelo cliente!");
+                mActivity = TransactionWait.this;
+
                 Intent transactionFailedIntent = new Intent(TransactionWait.this, TransactionFailed.class);
-                startActivity(transactionFailedIntent);
+                transactionFailedIntent.putExtra("token", cardToken);
+                transactionFailedIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                mActivity.startActivityForResult(transactionFailedIntent, CARD_REQUEST_CODE);
+
             }
 
         }
     }
-
-    /*public void onDebugSubmit(View view) {
-        mActivity = TransactionWait.this;
-
-        Intent bluetoothIntent = new Intent(TransactionWait.this, TransactionWait.class);
-        bluetoothIntent.putExtra("token", cardToken);
-        bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-        mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
-    }*/
 
     // Starts a Payment Activity from external MercadoPago Library File
     public static void createPayment(final Activity activity, String token, Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod, Discount discount, BigDecimal price) {

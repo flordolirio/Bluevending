@@ -11,12 +11,14 @@ import com.mercadopago.util.JsonUtil;
 
 public class TransactionFailed extends AppCompatActivity {
 
+    // Constraints
+    public static final int CARD_REQUEST_CODE = 13;
+
     // Activity parameters
     CountDownTimer counter;
-
-    public static final int CARD_REQUEST_CODE = 13;
     protected Activity mActivity;
 
+    // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
 
@@ -48,6 +50,7 @@ public class TransactionFailed extends AppCompatActivity {
     public void onBackPressed() {
         // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
         mActivity = TransactionFailed.this;
+
         Intent bluetoothIntent = new Intent(TransactionFailed.this, BluetoothActivity.class);
         bluetoothIntent.putExtra("token", cardToken);
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
