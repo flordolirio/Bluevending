@@ -73,7 +73,8 @@
                                 android:maxLength="16"
                                 style="@style/mpsdk_form_input"
                                 android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"/>
+                                android:layout_marginRight="10dp"
+                                android:text="4235647728025682" />
 
                             <TextView
                                 android:id="@+id/text_cod_seg"
@@ -96,7 +97,8 @@
                                 style="@style/mpsdk_form_input"
                                 android:layout_marginTop="10dp"
                                 android:layout_marginLeft="10dp"
-                                android:layout_marginRight="10dp"/>
+                                android:layout_marginRight="10dp"
+                                android:text="123" />
 
                             <TextView
                                 android:layout_width="fill_parent"
@@ -122,7 +124,8 @@
                                     style="@style/mpsdk_form_input"
                                     android:layout_marginTop="@dimen/mpsdk_margin_std"
                                     android:layout_marginLeft="10dp"
-                                    android:layout_marginRight="10dp"/>
+                                    android:layout_marginRight="10dp"
+                                    android:text="01" />
 
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -141,7 +144,8 @@
                                     android:singleLine="true"
                                     style="@style/mpsdk_form_input"
                                     android:layout_marginTop="@dimen/mpsdk_margin_std"
-                                    android:layout_marginLeft="10dp"/>
+                                    android:layout_marginLeft="10dp"
+                                    android:text="21" />
 
                                 <TextView
                                     android:id="@+id/expiryError"
@@ -175,7 +179,8 @@
                                 android:layout_height="wrap_content"
                                 android:layout_below="@+id/cardholderNameText"
                                 android:inputType="textPersonName"
-                                style="@style/mpsdk_form_input"/>
+                                style="@style/mpsdk_form_input"
+                                android:text="teste" />
 
                             <RelativeLayout
                                 android:id="@+id/identificationLayout"
@@ -212,7 +217,8 @@
                                     android:layout_alignLeft="@+id/identificationNumberText"
                                     android:singleLine="true"
                                     android:imeOptions="actionGo"
-                                    style="@style/mpsdk_form_input"/>
+                                    style="@style/mpsdk_form_input"
+                                    android:text="1234" />
 
                                 <Spinner
                                     android:id="@+id/identificationType"

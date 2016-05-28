@@ -23,12 +23,12 @@ public class BluetoothActivity extends AppCompatActivity {
     public static String EXTRA_ADDRESS = "device_address";
     public static int SELECT_PAIRED_DEVICE = 2;
     public static int SELECT_DISCOVERED_DEVICE = 3;
-
+    long id;
     protected String cardToken;
     protected PaymentMethod paymentMethod;
 
     static TextView statusMessage;
-    ConnectionThread connect;
+    //ConnectionThread connect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,13 +36,14 @@ public class BluetoothActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BA = BluetoothAdapter.getDefaultAdapter(); // hardware bluetooth em funcionamento
 
-        if(connect==null) {
+        /*if(connect==null) {
             connect = new ConnectionThread();
         }
 
         if(connect.running) {
             connect.cancel();
-        }
+        }*/
+
         statusMessage = (TextView) findViewById(R.id.statusMessage);
 
         cardToken = this.getIntent().getStringExtra("token");
@@ -66,12 +67,12 @@ public class BluetoothActivity extends AppCompatActivity {
             if(resultCode == RESULT_OK) {
                 statusMessage.setText("Você selecionou " + data.getStringExtra("btDevName"));
 
-                String address = data.getStringExtra("btDevAddress");
-                connect = new ConnectionThread(address);
-                connect.start();
-
                 mActivity = BluetoothActivity.this;
+
+                String address = data.getStringExtra("btDevAddress");
+
                 Intent mainScreenIntent = new Intent(BluetoothActivity.this, MainScreen.class);
+                mainScreenIntent.putExtra(EXTRA_ADDRESS, address);
                 mainScreenIntent.putExtra("token", cardToken);
                 mainScreenIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 mActivity.startActivityForResult(mainScreenIntent, CARD_REQUEST_CODE);

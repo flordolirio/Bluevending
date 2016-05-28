@@ -21,27 +21,35 @@ public class ConnectionThread extends Thread{
     String btDevAddress = null;
     String myUUID = "00001101-0000-1000-8000-00805F9B34FB";
     boolean running = false;
+    long id;
 
+    private static ConnectionThread SINGLETON = null;
+
+    public static ConnectionThread newInstance(String address) {
+        SINGLETON = new ConnectionThread(address);
+        return SINGLETON;
+    }
+
+    public static ConnectionThread getInstance() {
+        return SINGLETON;
+    }
+
+    @Override
+    public long getId() {
+        return id;
+    }
 
     public ConnectionThread(String btDevAddress) {
         this.btDevAddress = btDevAddress;
     }
 
-    public ConnectionThread() {
-        super();
-    }
 
     public void run() {
-
         // Conectar os dispositivos
         this.running = true;
         BluetoothAdapter btAdapter = BluetoothAdapter.getDefaultAdapter();
 
         try {
-
-            /*  Obtem uma representação do dispositivo Bluetooth com endereço btDevAddress.
-                Cria um socket Bluetooth.
-             */
             BluetoothDevice btDevice = btAdapter.getRemoteDevice(btDevAddress);
             btSocket = btDevice.createRfcommSocketToServiceRecord(UUID.fromString(myUUID));
 
@@ -55,8 +63,6 @@ public class ConnectionThread extends Thread{
 
         } catch (IOException e) {
 
-            /*  Caso ocorra alguma exceção, exibe o stack trace para debug.
-                Envia um código para a Activity oppenControl, informando que a conexão falhou.*/
             e.printStackTrace();
             toMainActivity("---N".getBytes());
         }
@@ -67,7 +73,6 @@ public class ConnectionThread extends Thread{
             toMainActivity("---S".getBytes());
 
             try {
-
                 input = btSocket.getInputStream();
                 output = btSocket.getOutputStream();
                 byte[] buffer = new byte[1024];
@@ -86,6 +91,10 @@ public class ConnectionThread extends Thread{
             }
         }
 
+    }
+
+    public boolean isReady() {
+        return (output != null);
     }
 
     private void toMainActivity(byte[] data) {
@@ -110,7 +119,6 @@ public class ConnectionThread extends Thread{
         }
     }
 
-    //Método utilizado pela Activity principal para encerrar a conexão.
     public void cancel() {
 
         try {

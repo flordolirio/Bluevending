@@ -109,7 +109,11 @@ public class TransactionWait extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
+        mActivity = TransactionWait.this;
+        Intent bluetoothIntent = new Intent(TransactionWait.this, BluetoothActivity.class);
+        bluetoothIntent.putExtra("token", cardToken);
+        bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }
 

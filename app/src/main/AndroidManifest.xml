@@ -20,22 +20,20 @@
         </activity>
 
         <activity
-            android:name=".BluetoothActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
+            android:name=".BluetoothActivity"
+            android:label="Maquinas Perto de Você"
+            android:screenOrientation="portrait" >
         </activity>
 
         <activity
             android:name=".PairedDevices"
-            android:label="Dispositivos pareados"
+            android:label="Máquinas Pareadas"
             android:parentActivityName=".BluetoothActivity" >
         </activity>
 
         <activity
             android:name=".DiscoveredDevices"
-            android:label="Dispositivos Descobertos"
+            android:label="Máquinas Descobertos"
             android:parentActivityName=".BluetoothActivity" >
         </activity>
 

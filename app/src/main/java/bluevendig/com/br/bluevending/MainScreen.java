@@ -1,6 +1,7 @@
 package bluevendig.com.br.bluevending;
 
 import android.app.Activity;
+import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -11,6 +12,7 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
@@ -25,16 +27,17 @@ public class MainScreen extends AppCompatActivity {
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
-
     // Activity parameters
     protected Activity mActivity;
-    private ArrayList<String> productTopList;
+    static ArrayList<String> productTopList;
     ArrayAdapter<String> adapterTopList;
     CountDownTimer counter;
-
+    ConnectionThread connect;
     // Layout Controls
     private TextView notifications;
-    private ListView productsList;
+    private static ListView productsList;
+    String dataString;
+    static TextView statusMessage;
 
     protected String address = null;
 
@@ -44,20 +47,27 @@ public class MainScreen extends AppCompatActivity {
         //receive the address of the bluetooth device
         Intent newint = getIntent();
         address = newint.getStringExtra(BluetoothActivity.EXTRA_ADDRESS);
+        statusMessage = (TextView) findViewById(R.id.statusMessage);
 
         setContentView(R.layout.screen_main);
+        connect = ConnectionThread.newInstance(address);
+        connect.start();
 
-        //recebe os dados na função handle
-
-        // Get activity parameters
-        // productTopList Receber via Bluetooth
-        // * DEBUG
         productTopList = new ArrayList<String>(){{
-            add("Pipoca Boku's                                    59%");
             add("Coca Cola 200ml                                  28%");
             add("Café Expresso                                    11%");
         }};
-        adapterTopList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, productTopList);
+        adapterTopList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productTopList);
+
+
+        while(!connect.isReady());
+
+        String mac = BluetoothAdapter.getDefaultAdapter().getAddress();
+
+        byte[] data = mac.getBytes();
+        connect.write(data);
+
+        Toast.makeText(getApplicationContext(), "MAC: " + mac, Toast.LENGTH_LONG).show();
 
         // Get Card Informations
         cardToken = this.getIntent().getStringExtra("token");
@@ -94,6 +104,11 @@ public class MainScreen extends AppCompatActivity {
         finish();
     }
 
+    public void enviarDados(View view) {
+        byte[] data = "ola".toString().getBytes();
+        connect.write(data);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
@@ -113,8 +128,8 @@ public class MainScreen extends AppCompatActivity {
         public void handleMessage(Message msg) {
 
             Bundle bundle = msg.getData();
-            byte[] data = bundle.getByteArray("data");
-            String dataString= new String(data);
+            final byte[] data = bundle.getByteArray("data");
+            final String dataString = new String(data);
 
             if(dataString.equals("---N")){
                 //statusMessage.setText("Ocorreu um erro durante a conexão!");
@@ -123,8 +138,7 @@ public class MainScreen extends AppCompatActivity {
                 //statusMessage.setText("Conectado!");
             }
             else {
-                //Aqui recebe os dados
-                //textSpace.setText(new String(data));
+                statusMessage.setText(new String(data));
             }
         }
     };
