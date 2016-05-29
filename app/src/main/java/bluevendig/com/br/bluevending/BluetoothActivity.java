@@ -28,7 +28,7 @@ public class BluetoothActivity extends AppCompatActivity {
     protected PaymentMethod paymentMethod;
 
     static TextView statusMessage;
-    //ConnectionThread connect;
+    ConnectionThread connect;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,9 +70,11 @@ public class BluetoothActivity extends AppCompatActivity {
                 mActivity = BluetoothActivity.this;
 
                 String address = data.getStringExtra("btDevAddress");
+                connect = ConnectionThread.newInstance(address);
+                connect.start();
 
                 Intent mainScreenIntent = new Intent(BluetoothActivity.this, MainScreen.class);
-                mainScreenIntent.putExtra(EXTRA_ADDRESS, address);
+               // mainScreenIntent.putExtra(EXTRA_ADDRESS, address);
                 mainScreenIntent.putExtra("token", cardToken);
                 mainScreenIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 mActivity.startActivityForResult(mainScreenIntent, CARD_REQUEST_CODE);

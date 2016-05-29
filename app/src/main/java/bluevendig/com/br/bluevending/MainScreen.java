@@ -24,7 +24,7 @@ public class MainScreen extends AppCompatActivity {
     // Constraints
     public static final int CARD_REQUEST_CODE = 13;
 
-    // Card Informations
+       // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
     // Activity parameters
@@ -36,23 +36,19 @@ public class MainScreen extends AppCompatActivity {
     // Layout Controls
     private TextView notifications;
     private static ListView productsList;
-    String dataString;
     static TextView statusMessage;
 
-    protected String address = null;
+   // protected String address = null;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         //receive the address of the bluetooth device
-        Intent newint = getIntent();
-        address = newint.getStringExtra(BluetoothActivity.EXTRA_ADDRESS);
-        statusMessage = (TextView) findViewById(R.id.statusMessage);
-
+       // Intent newint = getIntent();
+      // address = newint.getStringExtra(BluetoothActivity.EXTRA_ADDRESS);
         setContentView(R.layout.screen_main);
-        connect = ConnectionThread.newInstance(address);
-        connect.start();
-
+        statusMessage = (TextView) findViewById(R.id.recebe);
+        connect = ConnectionThread.getInstance();
         productTopList = new ArrayList<String>(){{
             add("Coca Cola 200ml                                  28%");
             add("Café Expresso                                    11%");
@@ -67,7 +63,7 @@ public class MainScreen extends AppCompatActivity {
         byte[] data = mac.getBytes();
         connect.write(data);
 
-        Toast.makeText(getApplicationContext(), "MAC: " + mac, Toast.LENGTH_LONG).show();
+       Toast.makeText(getApplicationContext(), "MAC: " + mac, Toast.LENGTH_LONG).show();
 
         // Get Card Informations
         cardToken = this.getIntent().getStringExtra("token");
@@ -78,9 +74,6 @@ public class MainScreen extends AppCompatActivity {
         notifications.setText("Por favor, selecione um produto na máquina de vendas dentro dos próximos 30 segundos.");
         productsList = (ListView) findViewById(R.id.listViewTopList);
         productsList.setAdapter(adapterTopList);
-
-        // Update Top Product List
-
 
         // Timer
         counter = new CountDownTimer(30000, 1000) {
@@ -102,11 +95,6 @@ public class MainScreen extends AppCompatActivity {
         returnIntent.putExtra("backButtonPressed", true);
         setResult(RESULT_CANCELED, returnIntent);
         finish();
-    }
-
-    public void enviarDados(View view) {
-        byte[] data = "ola".toString().getBytes();
-        connect.write(data);
     }
 
     @Override
@@ -132,10 +120,10 @@ public class MainScreen extends AppCompatActivity {
             final String dataString = new String(data);
 
             if(dataString.equals("---N")){
-                //statusMessage.setText("Ocorreu um erro durante a conexão!");
+                statusMessage.setText("Ocorreu um erro durante a conexão!");
             }
             else if(dataString.equals("---S")){
-                //statusMessage.setText("Conectado!");
+                statusMessage.setText("Conectado!");
             }
             else {
                 statusMessage.setText(new String(data));

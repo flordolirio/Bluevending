@@ -21,7 +21,6 @@ public class ConnectionThread extends Thread{
     String btDevAddress = null;
     String myUUID = "00001101-0000-1000-8000-00805F9B34FB";
     boolean running = false;
-    long id;
 
     private static ConnectionThread SINGLETON = null;
 
@@ -32,11 +31,6 @@ public class ConnectionThread extends Thread{
 
     public static ConnectionThread getInstance() {
         return SINGLETON;
-    }
-
-    @Override
-    public long getId() {
-        return id;
     }
 
     public ConnectionThread(String btDevAddress) {
@@ -53,11 +47,8 @@ public class ConnectionThread extends Thread{
             BluetoothDevice btDevice = btAdapter.getRemoteDevice(btDevAddress);
             btSocket = btDevice.createRfcommSocketToServiceRecord(UUID.fromString(myUUID));
 
-            /*  Envia ao sistema um comando para cancelar qualquer processo de descoberta em execução.*/
             btAdapter.cancelDiscovery();
 
-            /*  Solicita uma conexão ao dispositivo cujo endereço é btDevAddress.
-                Permanece em estado de espera até que a conexão seja estabelecida.*/
             if (btSocket != null)
                 btSocket.connect();
 
@@ -79,10 +70,8 @@ public class ConnectionThread extends Thread{
                 int bytes;
 
                 while(running) {
-
                     bytes = input.read(buffer);
                     toMainActivity(Arrays.copyOfRange(buffer, 0, bytes));
-
                 }
 
             } catch (IOException e) {
