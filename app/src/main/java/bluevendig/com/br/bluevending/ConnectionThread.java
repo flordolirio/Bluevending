@@ -67,11 +67,45 @@ public class ConnectionThread extends Thread{
                 input = btSocket.getInputStream();
                 output = btSocket.getOutputStream();
                 byte[] buffer = new byte[1024];
-                int bytes;
+                byte[] buffer2 = new byte[1024];
+                boolean complete = false, remaining = false;
+                int filled = 0;
+                int bytes = 0;
 
                 while(running) {
-                    bytes = input.read(buffer);
-                    toMainActivity(Arrays.copyOfRange(buffer, 0, bytes));
+
+                    if(!remaining) bytes = input.read(buffer);
+
+                    for(int i = 0; i < bytes; i++)
+                    {
+                        if(i == 0) remaining = false;
+
+                        if(buffer[i] != '\n')
+                        {
+                            buffer2[filled] = buffer[i];
+                            filled++;
+                        }
+                        else
+                        {
+                            complete = true;
+                            if(i != (bytes - 1))
+                            {
+                                remaining = true;
+                                bytes = bytes - filled;
+                            }
+                            buffer2[filled] = '#';
+                            filled++;
+
+                            break;
+                        }
+                    }
+
+                    if(complete)
+                    {
+                        toMainActivity(Arrays.copyOfRange(buffer2, 0, filled));
+                        complete = false;
+                        filled = 0;
+                    }
                 }
 
             } catch (IOException e) {
@@ -91,7 +125,7 @@ public class ConnectionThread extends Thread{
         Bundle bundle = new Bundle();
         bundle.putByteArray("data", data);
         message.setData(bundle);
-        MainScreen.handler.sendMessage(message);
+        BluetoothActivity.handler.sendMessage(message);
     }
 
     public void write(byte[] data) {

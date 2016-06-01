@@ -4,6 +4,8 @@ package bluevendig.com.br.bluevending;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.content.Intent;
+import android.os.Handler;
+import android.os.Message;
 import android.os.Parcelable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -36,14 +38,6 @@ public class BluetoothActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         BA = BluetoothAdapter.getDefaultAdapter(); // hardware bluetooth em funcionamento
 
-        /*if(connect==null) {
-            connect = new ConnectionThread();
-        }
-
-        if(connect.running) {
-            connect.cancel();
-        }*/
-
         statusMessage = (TextView) findViewById(R.id.statusMessage);
 
         cardToken = this.getIntent().getStringExtra("token");
@@ -74,7 +68,6 @@ public class BluetoothActivity extends AppCompatActivity {
                 connect.start();
 
                 Intent mainScreenIntent = new Intent(BluetoothActivity.this, MainScreen.class);
-               // mainScreenIntent.putExtra(EXTRA_ADDRESS, address);
                 mainScreenIntent.putExtra("token", cardToken);
                 mainScreenIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 mActivity.startActivityForResult(mainScreenIntent, CARD_REQUEST_CODE);
@@ -96,4 +89,24 @@ public class BluetoothActivity extends AppCompatActivity {
         Intent searchPairedDevicesIntent = new Intent(this, DiscoveredDevices.class);
         startActivityForResult(searchPairedDevicesIntent, SELECT_DISCOVERED_DEVICE);
     }
+
+    public static Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+
+            Bundle bundle = msg.getData();
+            final byte[] data = bundle.getByteArray("data");
+            final String dataString = new String(data);
+
+            if(dataString.equals("---N")){
+                statusMessage.setText("Ocorreu um erro durante a conexão!");
+            }
+            else if(dataString.equals("---S")){
+                statusMessage.setText("Conectado!");
+            }
+            else {
+                MainScreen.getAdapterTopList().add(new String(data));
+            }
+        }
+    };
 }

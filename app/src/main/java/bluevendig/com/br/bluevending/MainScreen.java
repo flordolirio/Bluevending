@@ -30,7 +30,7 @@ public class MainScreen extends AppCompatActivity {
     // Activity parameters
     protected Activity mActivity;
     static ArrayList<String> productTopList;
-    ArrayAdapter<String> adapterTopList;
+    static ArrayAdapter<String> adapterTopList;
     CountDownTimer counter;
     ConnectionThread connect;
     // Layout Controls
@@ -38,32 +38,29 @@ public class MainScreen extends AppCompatActivity {
     private static ListView productsList;
     static TextView statusMessage;
 
-   // protected String address = null;
+    public static ArrayAdapter<String> getAdapterTopList() {
+        return adapterTopList;
+    }
+    // protected String address = null;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
-        //receive the address of the bluetooth device
-       // Intent newint = getIntent();
-      // address = newint.getStringExtra(BluetoothActivity.EXTRA_ADDRESS);
         setContentView(R.layout.screen_main);
         statusMessage = (TextView) findViewById(R.id.recebe);
         connect = ConnectionThread.getInstance();
-        productTopList = new ArrayList<String>(){{
-            add("Coca Cola 200ml                                  28%");
-            add("Café Expresso                                    11%");
-        }};
-        adapterTopList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, productTopList);
-
+        adapterTopList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterTopList.add("Coca Cola 200ml                                  28%");
+        adapterTopList.add("Café Expresso                                    11%");
 
         while(!connect.isReady());
 
-        String mac = BluetoothAdapter.getDefaultAdapter().getAddress();
+       // String mac = BluetoothAdapter.getDefaultAdapter().getAddress();
 
-        byte[] data = mac.getBytes();
-        connect.write(data);
+        //byte[] data = mac.getBytes();
+        //connect.write(data);
 
-       Toast.makeText(getApplicationContext(), "MAC: " + mac, Toast.LENGTH_LONG).show();
+       //Toast.makeText(getApplicationContext(), "MAC: " + mac, Toast.LENGTH_LONG).show();
 
         // Get Card Informations
         cardToken = this.getIntent().getStringExtra("token");
@@ -110,25 +107,5 @@ public class MainScreen extends AppCompatActivity {
         selectedProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         mActivity.startActivityForResult(selectedProductIntent, CARD_REQUEST_CODE);
     }
-
-    public static Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-
-            Bundle bundle = msg.getData();
-            final byte[] data = bundle.getByteArray("data");
-            final String dataString = new String(data);
-
-            if(dataString.equals("---N")){
-                statusMessage.setText("Ocorreu um erro durante a conexão!");
-            }
-            else if(dataString.equals("---S")){
-                statusMessage.setText("Conectado!");
-            }
-            else {
-                statusMessage.setText(new String(data));
-            }
-        }
-    };
 
 }

@@ -12,7 +12,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".InitialScreen">
+       <activity android:name=".InitialScreen">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
@@ -79,11 +79,11 @@
             android:screenOrientation="portrait" >
         </activity>
 
-        <activity
+       <!-- <activity
             android:name=".MainScreen"
             android:label="Tela Principal"
             android:screenOrientation="portrait" >
-        </activity>
+        </activity>-->
 
     </application>
 
