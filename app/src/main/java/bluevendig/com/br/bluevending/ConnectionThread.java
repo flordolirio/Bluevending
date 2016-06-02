@@ -93,9 +93,6 @@ public class ConnectionThread extends Thread{
                                 remaining = true;
                                 bytes = bytes - filled;
                             }
-                            buffer2[filled] = '#';
-                            filled++;
-
                             break;
                         }
                     }
@@ -125,6 +122,7 @@ public class ConnectionThread extends Thread{
         Bundle bundle = new Bundle();
         bundle.putByteArray("data", data);
         message.setData(bundle);
+
         BluetoothActivity.handler.sendMessage(message);
     }
 

@@ -28,28 +28,30 @@ public class ProductSelected extends AppCompatActivity {
     protected CardToken mCard;
 
     // Activity parameters
-    protected BigDecimal productPrice;
+    protected static BigDecimal productPrice;
+    protected static String productName;
     protected Activity mActivity;
     private ArrayList<String> selectedProductList;
-    ArrayAdapter<String> adapterList;
+    static ArrayAdapter<String> adapterList;
     CountDownTimer counter;
 
     // Layout Controls
     private TextView notifications;
-    private ListView productList;
+    private static ListView productList;
 
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.selected_product);
 
+
+        productPrice = new BigDecimal("50");
+        productName = "";
         // Get activity parameters
         // selectedProductList Receber via Bluetooth
         // * DEBUG
-        selectedProductList = new ArrayList<String>(){{
-            add("Café                                                          R$ 2,50");
-        }};
-        adapterList = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selectedProductList);
+        adapterList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
+        adapterList.add("Café                                                          R$ 2,50");
 
         // Get Card Informations
         cardToken = this.getIntent().getStringExtra("token");
@@ -76,6 +78,33 @@ public class ProductSelected extends AppCompatActivity {
         }.start();
     }
 
+    public static void sendSelectedProduct(String blueBuffer) {
+        // Get only the products list separated by ","
+        // It removes the ID at first position with its "," and removes the "\n" at the end
+        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-3);
+
+        // Converts the String received to array
+        String[] productsBuffer = auxBuffer.split(",");
+
+        // Clears the Adapter List
+        adapterList.clear();
+
+        // Adds the selected product to the adapter list
+        adapterList.add(
+                        productsBuffer[0] +
+                        "                                                          R$ " +
+                        productsBuffer[1] +
+                        "," +
+                        productsBuffer[2]
+        );
+
+        productPrice = new BigDecimal(productsBuffer[1]+"."+productsBuffer[2]);
+        productName = productsBuffer[0];
+
+        // Updates the layout with the correct products list
+        productList.setAdapter(adapterList);
+    }
+
     @Override
     public void onBackPressed() {
         // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
@@ -91,6 +120,7 @@ public class ProductSelected extends AppCompatActivity {
         transactionIntent.putExtra("token", cardToken);
         transactionIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         transactionIntent.putExtra("productPrice", productPrice.toString());
+        transactionIntent.putExtra("productName", productName);
         transactionIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(transactionIntent, CARD_REQUEST_CODE);
     }

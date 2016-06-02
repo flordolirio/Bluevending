@@ -52,10 +52,10 @@ public class MainScreen extends AppCompatActivity {
         statusMessage = (TextView) findViewById(R.id.recebe);
         connect = ConnectionThread.getInstance();
         adapterTopList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        adapterTopList.add("Coca Cola 200ml                                  28%");
-        adapterTopList.add("Café Expresso                                    11%");
+        adapterTopList.add("Coca Cola");
+        adapterTopList.add("Café Expresso");
 
-        while(!connect.isReady());
+        //while(!connect.isReady());
 
        // String mac = BluetoothAdapter.getDefaultAdapter().getAddress();
 
@@ -88,10 +88,10 @@ public class MainScreen extends AppCompatActivity {
         }.start();
     }
 
-    public void receiveProductsList(String blueBuffer) {
+    public static void receiveProductsList(String blueBuffer) {
         // Get only the products list separated by ","
         // It removes the ID at first position with its "," and removes the "\n" at the end
-        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-2);
+        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-3);
 
         // Converts the String received to array
         String[] productsBuffer = auxBuffer.split(",");

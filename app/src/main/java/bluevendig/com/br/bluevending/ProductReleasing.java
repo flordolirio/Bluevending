@@ -11,6 +11,8 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
+import java.math.BigDecimal;
+
 public class ProductReleasing extends AppCompatActivity {
 
     // Constraints
@@ -20,6 +22,8 @@ public class ProductReleasing extends AppCompatActivity {
     protected String cardToken;
     protected PaymentMethod paymentMethod;
     protected CardToken mCard;
+
+    static String status;
 
     // Activity parameters
     CountDownTimer counter;
@@ -40,7 +44,7 @@ public class ProductReleasing extends AppCompatActivity {
 
         // Set layout controls
         chronometerReleasing = (TextView) findViewById(R.id.chronometerReleasingProduct);
-        chronometerReleasing.setText("30");
+        chronometerReleasing.setText("");
 
         // Timer
         counter = new CountDownTimer(5000, 1000) {
@@ -49,16 +53,36 @@ public class ProductReleasing extends AppCompatActivity {
                 chronometerReleasing.setText("" + millisUntilFinished / 1000);
             }
 
-            public void onFinish() {
-                mActivity = ProductReleasing.this;
+            public void onFinish(){
+                if(status.equals("1")) {
+                    mActivity = ProductReleasing.this;
 
-                Intent successfullyOrderIntent = new Intent(ProductReleasing.this, OrderSuccessfully.class);
-                successfullyOrderIntent.putExtra("token", cardToken);
-                successfullyOrderIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
-                successfullyOrderIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
-                mActivity.startActivityForResult(successfullyOrderIntent, CARD_REQUEST_CODE);
+                    Intent successfullyOrderIntent = new Intent(ProductReleasing.this, OrderSuccessfully.class);
+                    successfullyOrderIntent.putExtra("token", cardToken);
+                    successfullyOrderIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                    successfullyOrderIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
+                    mActivity.startActivityForResult(successfullyOrderIntent, CARD_REQUEST_CODE);
+                }
+                else{
+                    mActivity = ProductReleasing.this;
+
+                    Intent requestRefundIntent = new Intent(ProductReleasing.this, RefundRequest.class);
+                    requestRefundIntent.putExtra("token", cardToken);
+                    requestRefundIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                    requestRefundIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
+                    mActivity.startActivityForResult(requestRefundIntent, CARD_REQUEST_CODE);
+                }
             }
         }.start();
+    }
+    public static void feedBackProduct(String blueBuffer) {
+        // Get only the products list separated by ","
+        // It removes the ID at first position with its "," and removes the "\n" at the end
+        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-3);
+
+        // Converts the String received to array
+        status = auxBuffer;
+
     }
 
     @Override

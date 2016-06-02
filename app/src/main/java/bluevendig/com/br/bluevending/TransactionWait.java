@@ -44,11 +44,14 @@ public class TransactionWait extends AppCompatActivity {
 
     // Activity parameters
     protected BigDecimal productPrice;
+    protected String productName;
     CountDownTimer counter;
     private Activity mActivity;
 
     // Layout Controls
     private TextView chronometerWaiter;
+
+    ConnectionThread connect;
 
 
     /*
@@ -89,6 +92,8 @@ public class TransactionWait extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.wait_transaction);
 
+        connect = ConnectionThread.getInstance();
+
         // Get activity parameters
         mActivity = this;
 
@@ -98,6 +103,7 @@ public class TransactionWait extends AppCompatActivity {
         mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
         String auxProductPrice = this.getIntent().getStringExtra("productPrice");
         productPrice = new BigDecimal(auxProductPrice);
+        productName = this.getIntent().getStringExtra("productName");
 
         // Set layout controls
         chronometerWaiter = (TextView) findViewById(R.id.chronometerWaitTransation);
@@ -137,11 +143,16 @@ public class TransactionWait extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == MercadoPago.CONGRATS_REQUEST_CODE) {
 
+            byte[] packet;
+
             LayoutUtil.showRegularLayout(this);
 
             if (resultCode == RESULT_OK ) {
                 //notifications.setText("Um Pagamento foi efetuado com sucesso pelo cliente!");
                 mActivity = TransactionWait.this;
+
+                packet = "4,S/n".getBytes();
+                connect.write(packet);
 
                 Intent releaseProductIntent = new Intent(TransactionWait.this, ProductReleasing.class);
                 releaseProductIntent.putExtra("token", cardToken);
@@ -152,6 +163,9 @@ public class TransactionWait extends AppCompatActivity {
             } else {
                 //notifications.setText("Um pagamento foi abortado/falhou em ser executado pelo cliente!");
                 mActivity = TransactionWait.this;
+
+                packet = "4,N/n".getBytes();
+                connect.write(packet);
 
                 Intent transactionFailedIntent = new Intent(TransactionWait.this, TransactionFailed.class);
                 transactionFailedIntent.putExtra("token", cardToken);
@@ -181,7 +195,7 @@ public class TransactionWait extends AppCompatActivity {
             @Override
             public void success(Response<Token> response) {
                 cardToken = response.body().getId();
-                createPayment(mActivity, cardToken, 1, null, paymentMethod, null, productPrice);
+                createPayment(mActivity, cardToken, 1, null, paymentMethod, null, productPrice, productName);
             }
 
             @Override
@@ -194,15 +208,15 @@ public class TransactionWait extends AppCompatActivity {
     }
 
     // Starts a Payment Activity from external MercadoPago Library File
-    public static void createPayment(final Activity activity, String token, Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod, Discount discount, BigDecimal price) {
+    public static void createPayment(final Activity activity, String token, Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod, Discount discount, BigDecimal itemPrice, String itemName) {
 
         if (paymentMethod != null) {
 
             LayoutUtil.showProgressLayout(activity);
 
             // Set item
-            Item item = new Item(DUMMY_ITEM_ID, DUMMY_ITEM_QUANTITY,
-                    price);
+            Item item = new Item(itemName, 1,
+                    itemPrice);
 
             // Set payment method id
             String paymentMethodId = paymentMethod.getId();
