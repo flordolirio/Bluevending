@@ -12,6 +12,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
@@ -28,6 +29,7 @@ public class BluetoothActivity extends AppCompatActivity {
     long id;
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
 
     static TextView statusMessage;
     ConnectionThread connect;
@@ -42,6 +44,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
 
         if(!BA.isEnabled()) {
             BA.enable();//ativa o Bluetooh
@@ -70,6 +73,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 Intent mainScreenIntent = new Intent(BluetoothActivity.this, MainScreen.class);
                 mainScreenIntent.putExtra("token", cardToken);
                 mainScreenIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                mainScreenIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(mainScreenIntent, CARD_REQUEST_CODE);
             }
             else {

@@ -202,6 +202,7 @@ public class InitialScreen extends AppCompatActivity {
 
                 String auxToken = data.getStringExtra("token");
                 PaymentMethod auxPaymentMethod = JsonUtil.getInstance().fromJson(data.getStringExtra("paymentMethod"), PaymentMethod.class);
+                CardToken auxMCard = JsonUtil.getInstance().fromJson(data.getStringExtra("mCard"), CardToken.class);
 
                 mActivity = InitialScreen.this;
 
@@ -210,6 +211,7 @@ public class InitialScreen extends AppCompatActivity {
                 Intent bluetoothIntent = new Intent(InitialScreen.this, BluetoothActivity.class);
                 bluetoothIntent.putExtra("token", auxToken);
                 bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(auxPaymentMethod));
+                bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(auxMCard));
                 mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
 
 
@@ -218,53 +220,6 @@ public class InitialScreen extends AppCompatActivity {
                 textView2.setText("Inserção de cartão foi abortada/informações inválidas de cartão recebidas!");
 
             }
-        }
-    }
-
-    // Starts a Payment Activity from external MercadoPago Library File
-    public static void createPayment(final Activity activity, String token, Integer installments, Long cardIssuerId, final PaymentMethod paymentMethod, Discount discount) {
-
-        if (paymentMethod != null) {
-
-            LayoutUtil.showProgressLayout(activity);
-
-            // Set item
-            Item item = new Item(DUMMY_ITEM_ID, DUMMY_ITEM_QUANTITY,
-                    DUMMY_ITEM_UNIT_PRICE);
-
-            // Set payment method id
-            String paymentMethodId = paymentMethod.getId();
-
-            // Set campaign id
-            Long campaignId = (discount != null) ? discount.getId() : null;
-
-            // Set merchant payment
-            MerchantPayment payment = new MerchantPayment(item, installments, cardIssuerId,
-                    token, paymentMethodId, campaignId, DUMMY_MERCHANT_ACCESS_TOKEN);
-
-            // Create payment
-            ErrorHandlingCallAdapter.MyCall<Payment> call = MerchantServer.createPayment(activity, DUMMY_MERCHANT_BASE_URL, DUMMY_MERCHANT_CREATE_PAYMENT_URI, payment);
-            call.enqueue(new ErrorHandlingCallAdapter.MyCallback<Payment>() {
-                @Override
-                public void success(Response<Payment> response) {
-
-                    new MercadoPago.StartActivityBuilder()
-                            .setActivity(activity)
-                            .setPayment(response.body())
-                            .setPaymentMethod(paymentMethod)
-                            .startCongratsActivity();
-                }
-
-                @Override
-                public void failure(ApiException apiException) {
-
-                    LayoutUtil.showRegularLayout(activity);
-                    Toast.makeText(activity, apiException.getMessage(), Toast.LENGTH_LONG).show();
-                }
-            });
-        } else {
-
-            Toast.makeText(activity, "Invalid payment method", Toast.LENGTH_LONG).show();
         }
     }
 

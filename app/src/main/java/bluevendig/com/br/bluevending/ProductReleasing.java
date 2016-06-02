@@ -7,6 +7,7 @@ import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 import android.widget.TextView;
 
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
@@ -18,6 +19,7 @@ public class ProductReleasing extends AppCompatActivity {
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
 
     // Activity parameters
     CountDownTimer counter;
@@ -34,6 +36,7 @@ public class ProductReleasing extends AppCompatActivity {
         // Get activity parameters
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
 
         // Set layout controls
         chronometerReleasing = (TextView) findViewById(R.id.chronometerReleasingProduct);
@@ -52,6 +55,7 @@ public class ProductReleasing extends AppCompatActivity {
                 Intent successfullyOrderIntent = new Intent(ProductReleasing.this, OrderSuccessfully.class);
                 successfullyOrderIntent.putExtra("token", cardToken);
                 successfullyOrderIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                successfullyOrderIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(successfullyOrderIntent, CARD_REQUEST_CODE);
             }
         }.start();

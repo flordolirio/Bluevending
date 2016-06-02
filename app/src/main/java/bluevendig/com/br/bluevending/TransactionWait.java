@@ -12,11 +12,14 @@ import com.mercadopago.adapters.ErrorHandlingCallAdapter;
 import com.mercadopago.core.MercadoPago;
 import com.mercadopago.core.MerchantServer;
 import com.mercadopago.model.ApiException;
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.Discount;
 import com.mercadopago.model.Item;
 import com.mercadopago.model.MerchantPayment;
 import com.mercadopago.model.Payment;
 import com.mercadopago.model.PaymentMethod;
+import com.mercadopago.model.Token;
+import com.mercadopago.util.ApiUtil;
 import com.mercadopago.util.JsonUtil;
 import com.mercadopago.util.LayoutUtil;
 
@@ -32,11 +35,17 @@ public class TransactionWait extends AppCompatActivity {
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
+
+    //Local Vars
+    private MercadoPago mMercadoPago;
+    private String myPublicKey = "APP_USR-f9f13efb-9283-4348-bcc0-8d8634c51eb5";
+    private String mExceptionOnMethod;
 
     // Activity parameters
     protected BigDecimal productPrice;
     CountDownTimer counter;
-    protected Activity mActivity;
+    private Activity mActivity;
 
     // Layout Controls
     private TextView chronometerWaiter;
@@ -81,9 +90,12 @@ public class TransactionWait extends AppCompatActivity {
         setContentView(R.layout.wait_transaction);
 
         // Get activity parameters
+        mActivity = this;
+
         // Get Card Informations
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
         String auxProductPrice = this.getIntent().getStringExtra("productPrice");
         productPrice = new BigDecimal(auxProductPrice);
 
@@ -103,8 +115,10 @@ public class TransactionWait extends AppCompatActivity {
             }
         }.start();
 
+        //Create a Token to the Card
+        createTokenAsync();
         // Create payment
-        createPayment(this, cardToken, 1, null, paymentMethod, null, productPrice);
+        //createPayment(this, cardToken, 1, null, paymentMethod, null, productPrice);
     }
 
     @Override
@@ -113,6 +127,7 @@ public class TransactionWait extends AppCompatActivity {
         Intent bluetoothIntent = new Intent(TransactionWait.this, BluetoothActivity.class);
         bluetoothIntent.putExtra("token", cardToken);
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }
@@ -131,6 +146,7 @@ public class TransactionWait extends AppCompatActivity {
                 Intent releaseProductIntent = new Intent(TransactionWait.this, ProductReleasing.class);
                 releaseProductIntent.putExtra("token", cardToken);
                 releaseProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                releaseProductIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(releaseProductIntent, CARD_REQUEST_CODE);
 
             } else {
@@ -140,11 +156,41 @@ public class TransactionWait extends AppCompatActivity {
                 Intent transactionFailedIntent = new Intent(TransactionWait.this, TransactionFailed.class);
                 transactionFailedIntent.putExtra("token", cardToken);
                 transactionFailedIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                transactionFailedIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(transactionFailedIntent, CARD_REQUEST_CODE);
 
             }
 
         }
+    }
+
+    // Creation of Card Token
+    private void createTokenAsync() {
+        mActivity = TransactionWait.this;
+
+        // Init MercadoPago object with public key
+        mMercadoPago = new MercadoPago.Builder()
+                .setContext(mActivity)
+                .setPublicKey(DUMMY_MERCHANT_PUBLIC_KEY)
+                .build();
+
+        LayoutUtil.showProgressLayout(mActivity);
+
+        ErrorHandlingCallAdapter.MyCall<Token> call = mMercadoPago.createToken(mCard);
+        call.enqueue(new ErrorHandlingCallAdapter.MyCallback<Token>() {
+            @Override
+            public void success(Response<Token> response) {
+                cardToken = response.body().getId();
+                createPayment(mActivity, cardToken, 1, null, paymentMethod, null, productPrice);
+            }
+
+            @Override
+            public void failure(ApiException apiException) {
+
+                mExceptionOnMethod = "createTokenAsync";
+                ApiUtil.finishWithApiException(mActivity, apiException);
+            }
+        });
     }
 
     // Starts a Payment Activity from external MercadoPago Library File

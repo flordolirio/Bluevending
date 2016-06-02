@@ -14,6 +14,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
@@ -27,6 +28,7 @@ public class MainScreen extends AppCompatActivity {
        // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
     // Activity parameters
     protected Activity mActivity;
     static ArrayList<String> productTopList;
@@ -65,6 +67,7 @@ public class MainScreen extends AppCompatActivity {
         // Get Card Informations
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
 
         // Set layout controls
         notifications = (TextView) findViewById(R.id.editTextNotifications);
@@ -105,6 +108,7 @@ public class MainScreen extends AppCompatActivity {
         Intent selectedProductIntent = new Intent(MainScreen.this, ProductSelected.class);
         selectedProductIntent.putExtra("token", cardToken);
         selectedProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        selectedProductIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(selectedProductIntent, CARD_REQUEST_CODE);
     }
 

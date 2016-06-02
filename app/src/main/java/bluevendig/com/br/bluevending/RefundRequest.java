@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
@@ -25,6 +26,7 @@ public class RefundRequest extends AppCompatActivity {
 
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
 
     // Layout Controls
     private TextView refundRequesting;
@@ -36,6 +38,7 @@ public class RefundRequest extends AppCompatActivity {
 
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
 
         // Get activity parameters
 
@@ -60,6 +63,7 @@ public class RefundRequest extends AppCompatActivity {
         Intent bluetoothIntent = new Intent(RefundRequest.this, BluetoothActivity.class);
         bluetoothIntent.putExtra("token", cardToken);
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }

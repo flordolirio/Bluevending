@@ -9,6 +9,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
@@ -24,6 +25,7 @@ public class OrderSuccessfully extends AppCompatActivity {
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
 
     // Layout Controls
     Button reportOrder;
@@ -37,6 +39,7 @@ public class OrderSuccessfully extends AppCompatActivity {
 
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
 
         // Set layout controls
         reportOrder = (Button) findViewById(R.id.buttonReportOrder);
@@ -61,6 +64,7 @@ public class OrderSuccessfully extends AppCompatActivity {
         Intent bluetoothIntent = new Intent(OrderSuccessfully.this, BluetoothActivity.class);
         bluetoothIntent.putExtra("token", cardToken);
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
     }
 
@@ -71,6 +75,7 @@ public class OrderSuccessfully extends AppCompatActivity {
         Intent requestRefundIntent = new Intent(OrderSuccessfully.this, RefundRequest.class);
         requestRefundIntent.putExtra("token", cardToken);
         requestRefundIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        requestRefundIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(requestRefundIntent, CARD_REQUEST_CODE);
     }
 

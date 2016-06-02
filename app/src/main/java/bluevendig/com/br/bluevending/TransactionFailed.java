@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
 
+import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
@@ -21,6 +22,7 @@ public class TransactionFailed extends AppCompatActivity {
     // Card Informations
     protected String cardToken;
     protected PaymentMethod paymentMethod;
+    protected CardToken mCard;
 
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -31,6 +33,7 @@ public class TransactionFailed extends AppCompatActivity {
 
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
+        mCard = JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("mCard"), CardToken.class);
 
         // Set layout controls
 
@@ -54,6 +57,7 @@ public class TransactionFailed extends AppCompatActivity {
         Intent bluetoothIntent = new Intent(TransactionFailed.this, BluetoothActivity.class);
         bluetoothIntent.putExtra("token", cardToken);
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }
