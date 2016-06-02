@@ -88,6 +88,26 @@ public class MainScreen extends AppCompatActivity {
         }.start();
     }
 
+    public void receiveProductsList(String blueBuffer) {
+        // Get only the products list separated by ","
+        // It removes the ID at first position with its "," and removes the "\n" at the end
+        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-2);
+
+        // Converts the String received to array
+        String[] productsBuffer = auxBuffer.split(",");
+
+        // Clears the Adapter List
+        adapterTopList.clear();
+
+        // Adds the received products list to the adapter list
+        for(int i = 0; i < productsBuffer.length; i++) {
+            adapterTopList.add(productsBuffer[i]);
+        }
+
+        // Updates the layout with the correct products list
+        productsList.setAdapter(adapterTopList);
+    }
+
     @Override
     public void onBackPressed() {
 
