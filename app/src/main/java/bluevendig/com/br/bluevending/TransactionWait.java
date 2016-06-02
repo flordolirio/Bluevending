@@ -151,7 +151,7 @@ public class TransactionWait extends AppCompatActivity {
                 //notifications.setText("Um Pagamento foi efetuado com sucesso pelo cliente!");
                 mActivity = TransactionWait.this;
 
-                packet = "4,S/n".getBytes();
+                packet = "4,S\n".getBytes();
                 connect.write(packet);
 
                 Intent releaseProductIntent = new Intent(TransactionWait.this, ProductReleasing.class);
@@ -159,12 +159,13 @@ public class TransactionWait extends AppCompatActivity {
                 releaseProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 releaseProductIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(releaseProductIntent, CARD_REQUEST_CODE);
+                finish();
 
             } else {
                 //notifications.setText("Um pagamento foi abortado/falhou em ser executado pelo cliente!");
                 mActivity = TransactionWait.this;
 
-                packet = "4,N/n".getBytes();
+                packet = "4,N\n".getBytes();
                 connect.write(packet);
 
                 Intent transactionFailedIntent = new Intent(TransactionWait.this, TransactionFailed.class);
@@ -172,6 +173,7 @@ public class TransactionWait extends AppCompatActivity {
                 transactionFailedIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 transactionFailedIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(transactionFailedIntent, CARD_REQUEST_CODE);
+                finish();
 
             }
 
@@ -215,8 +217,8 @@ public class TransactionWait extends AppCompatActivity {
             LayoutUtil.showProgressLayout(activity);
 
             // Set item
-            Item item = new Item(itemName, 1,
-                    itemPrice);
+            Item item = new Item("id1", 1,
+                    new BigDecimal("100"));
 
             // Set payment method id
             String paymentMethodId = paymentMethod.getId();

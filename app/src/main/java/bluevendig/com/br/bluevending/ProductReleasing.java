@@ -37,6 +37,8 @@ public class ProductReleasing extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.releasing_product);
 
+        status = "";
+
         // Get activity parameters
         cardToken = this.getIntent().getStringExtra("token");
         paymentMethod =  JsonUtil.getInstance().fromJson(this.getIntent().getStringExtra("paymentMethod"), PaymentMethod.class);
@@ -62,6 +64,7 @@ public class ProductReleasing extends AppCompatActivity {
                     successfullyOrderIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                     successfullyOrderIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                     mActivity.startActivityForResult(successfullyOrderIntent, CARD_REQUEST_CODE);
+                    finish();
                 }
                 else{
                     mActivity = ProductReleasing.this;
@@ -71,6 +74,7 @@ public class ProductReleasing extends AppCompatActivity {
                     requestRefundIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                     requestRefundIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                     mActivity.startActivityForResult(requestRefundIntent, CARD_REQUEST_CODE);
+                    finish();
                 }
             }
         }.start();
@@ -78,7 +82,7 @@ public class ProductReleasing extends AppCompatActivity {
     public static void feedBackProduct(String blueBuffer) {
         // Get only the products list separated by ","
         // It removes the ID at first position with its "," and removes the "\n" at the end
-        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-3);
+        String auxBuffer = "" + blueBuffer.charAt(2);
 
         // Converts the String received to array
         status = auxBuffer;
@@ -88,6 +92,13 @@ public class ProductReleasing extends AppCompatActivity {
     @Override
     public void onBackPressed() {
         // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
+        mActivity = ProductReleasing.this;
+
+        Intent bluetoothIntent = new Intent(ProductReleasing.this, BluetoothActivity.class);
+        bluetoothIntent.putExtra("token", cardToken);
+        bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
+        mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }
 

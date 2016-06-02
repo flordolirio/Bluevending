@@ -66,6 +66,7 @@ public class OrderSuccessfully extends AppCompatActivity {
         bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
+        finish();
     }
 
 
@@ -77,6 +78,7 @@ public class OrderSuccessfully extends AppCompatActivity {
         requestRefundIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         requestRefundIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(requestRefundIntent, CARD_REQUEST_CODE);
+        finish();
     }
 
 }

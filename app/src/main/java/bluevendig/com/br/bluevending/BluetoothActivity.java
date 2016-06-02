@@ -3,6 +3,7 @@ package bluevendig.com.br.bluevending;
 
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Handler;
 import android.os.Message;
@@ -11,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
@@ -63,13 +65,24 @@ public class BluetoothActivity extends AppCompatActivity {
                 connect = ConnectionThread.newInstance(address);
                 connect.start();
 
+                byte[] packet;
+                while(!connect.isReady());
+
+                packet = ("1," +
+                        address.replace(":","") +
+                        "\n").getBytes();
+                connect.write(packet);
+
                 mActivity = BluetoothActivity.this;
+
+                //Toast.makeText(getApplicationContext(), new String(packet), Toast.LENGTH_LONG).show();
 
                 Intent mainScreenIntent = new Intent(BluetoothActivity.this, MainScreen.class);
                 mainScreenIntent.putExtra("token", cardToken);
                 mainScreenIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
                 mainScreenIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
                 mActivity.startActivityForResult(mainScreenIntent, CARD_REQUEST_CODE);
+                finish();
             }
             else {
                 statusMessage.setText("Nenhum dispositivo selecionado!");
@@ -108,7 +121,7 @@ public class BluetoothActivity extends AppCompatActivity {
                 MainScreen.receiveProductsList(dataString);
             }
             else if (id.equals("3")){
-                ProductSelected.sendSelectedProduct(dataString);
+                MainScreen.onSelectedProduct(dataString);
             }
             else if (id.equals("5")){
                 ProductReleasing.feedBackProduct(dataString);

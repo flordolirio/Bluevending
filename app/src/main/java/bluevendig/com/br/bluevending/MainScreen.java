@@ -18,9 +18,14 @@ import com.mercadopago.model.CardToken;
 import com.mercadopago.model.PaymentMethod;
 import com.mercadopago.util.JsonUtil;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 
 public class MainScreen extends AppCompatActivity {
+
+    // Local Vars
+    static String status = "";
+    static String packet;
 
     // Constraints
     public static final int CARD_REQUEST_CODE = 13;
@@ -52,8 +57,9 @@ public class MainScreen extends AppCompatActivity {
         statusMessage = (TextView) findViewById(R.id.recebe);
         connect = ConnectionThread.getInstance();
         adapterTopList = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1);
-        adapterTopList.add("Coca Cola");
-        adapterTopList.add("Café Expresso");
+
+        /*adapterTopList.add("Coca Cola");
+        adapterTopList.add("Café Expresso");*/
 
         //while(!connect.isReady());
 
@@ -80,10 +86,28 @@ public class MainScreen extends AppCompatActivity {
 
             public void onTick(long millisUntilFinished) {
                 notifications.setText("Por favor, selecione um produto na máquina de vendas dentro dos próximos " + millisUntilFinished / 1000 + " segundos.");
+
+                if(status.equals("s")) {
+                    counter.cancel();
+                    onFinish();
+                }
             }
 
             public void onFinish() {
-                onBackPressed();
+                if(status.equals("s")) {
+                    mActivity = MainScreen.this;
+
+                    Intent selectedProductIntent = new Intent(MainScreen.this, ProductSelected.class);
+                    selectedProductIntent.putExtra("token", cardToken);
+                    selectedProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+                    selectedProductIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
+                    selectedProductIntent.putExtra("selectedProduct", packet);
+                    mActivity.startActivityForResult(selectedProductIntent, CARD_REQUEST_CODE);
+                    finish();
+                }
+                else {
+                    onBackPressed();
+                }
             }
         }.start();
     }
@@ -91,7 +115,7 @@ public class MainScreen extends AppCompatActivity {
     public static void receiveProductsList(String blueBuffer) {
         // Get only the products list separated by ","
         // It removes the ID at first position with its "," and removes the "\n" at the end
-        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-3);
+        String auxBuffer = blueBuffer.substring(2, blueBuffer.length()-2);
 
         // Converts the String received to array
         String[] productsBuffer = auxBuffer.split(",");
@@ -110,16 +134,26 @@ public class MainScreen extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
+        // Bluetooth - Voltar à Atividade da lista de Máquinas Bluevending de seleção
+        mActivity = MainScreen.this;
 
-        Intent returnIntent = new Intent();
-        returnIntent.putExtra("backButtonPressed", true);
-        setResult(RESULT_CANCELED, returnIntent);
+        Intent bluetoothIntent = new Intent(MainScreen.this, BluetoothActivity.class);
+        bluetoothIntent.putExtra("token", cardToken);
+        bluetoothIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
+        bluetoothIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
+        mActivity.startActivityForResult(bluetoothIntent, CARD_REQUEST_CODE);
         finish();
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
 
+    }
+
+    public static void onSelectedProduct(String blueBuffer) {
+        status = "s";
+
+        packet = blueBuffer;
     }
 
     public void onButtonSubmit(View view) {
@@ -130,6 +164,7 @@ public class MainScreen extends AppCompatActivity {
         selectedProductIntent.putExtra("paymentMethod", JsonUtil.getInstance().toJson(paymentMethod));
         selectedProductIntent.putExtra("mCard", JsonUtil.getInstance().toJson(mCard));
         mActivity.startActivityForResult(selectedProductIntent, CARD_REQUEST_CODE);
+        finish();
     }
 
 }
