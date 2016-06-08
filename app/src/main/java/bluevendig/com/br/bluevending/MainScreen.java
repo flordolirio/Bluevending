@@ -95,6 +95,7 @@ public class MainScreen extends AppCompatActivity {
 
             public void onFinish() {
                 if(status.equals("s")) {
+                    status = "";
                     mActivity = MainScreen.this;
 
                     Intent selectedProductIntent = new Intent(MainScreen.this, ProductSelected.class);
